@@ -442,5 +442,10 @@ def submit_quiz():
         correct=correct_answers
     )
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/clearUsers")
+def clearUsers():
+    try:
+        db.execute("DELETE FROM users")
+        session.clear()
+    except Exception as e:
+        return "Exception"
