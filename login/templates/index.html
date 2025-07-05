@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block title %}SAT Mock - Master the SAT with Mock Tests{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/indexStyle.css') }}">
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/index" class="logo">
+                <div class="logo-icon">📚</div>
+                SAT Scholars
+            </a>
+            <div class="nav-center">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-buttons" id="navButtons">
+                {% if username %}
+                    <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                    <div class="user-profile">
+                        <div class="user-icon">👤</div>
+                        <span>{{ username }}</span>
+                    </div>
+                    <form action="/logout" method="get">
+                        <button type="submit" class="btn btn-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <form action="/register" method="post" style="display:inline;">
+                        <a href="/register" class="btn btn-secondary" onclick="event.preventDefault(); this.closest('form').submit();">Login</a>
+                    </form>
+                    <a href="/register" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <!-- Welcome message for logged in users -->
+        <div class="welcome-message {% if username %}show{% endif %}" id="welcomeMessage">
+            <div class="welcome-title">Welcome back! 👋</div>
+            <div class="welcome-text">Ready to continue your SAT preparation journey?</div>
+        </div>
+
+        <h1>Master the SAT with <span class="highlight">Mock Tests</span></h1>
+        <p>Practice with realistic SAT questions, get instant feedback, and track your progress. Boost your confidence and achieve your target score.</p>
+        <div class="hero-buttons" id="heroButtons">
+            {% if username %}
+                <a href="/quiz" class="btn btn-primary btn-large">Start New Quiz →</a>
+                <a href="/dashboard" class="btn btn-secondary btn-large">Go to Dashboard</a>
+            {% else %}
+                <a href="/register" class="btn btn-primary btn-large">Start Free Practice →</a>
+                <form action="/register" method="post" style="display:inline;">
+                    <a href="/register" class="btn btn-secondary btn-large" onclick="event.preventDefault(); this.closest('form').submit();">Login to Continue</a>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Everything You Need to Succeed</h2>
+        <p class="section-subtitle">Our comprehensive platform provides all the tools and resources you need to excel on the SAT.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✓</div>
+                <h3>Realistic Mock Tests</h3>
+                <p>Practice with questions that mirror the actual SAT format and difficulty level</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⏱</div>
+                <h3>Instant Feedback</h3>
+                <p>Get immediate results with detailed explanations for every question</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Score Tracking</h3>
+                <p>Monitor your progress and identify areas for improvement over time</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AI Section -->
+<section class="ai-section">
+    <div class="container">
+        <div class="ai-icon">🧠</div>
+        <h2>AI-Powered Explanations</h2>
+        <p>Our intelligent assistant provides personalized explanations for each question, helping you understand concepts and improve your problem-solving skills.</p>
+        <div id="aiSectionButton">
+            {% if username %}
+                <a href="/quiz" class="btn btn-primary btn-large">Start Learning Now</a>
+            {% else %}
+                <a href="/register" class="btn btn-primary btn-large">Experience AI Learning</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta" id="ctaSection">
+    {% if username %}
+        <div class="container">
+            <h2>Continue Your SAT Journey</h2>
+            <p>Keep practicing and track your improvement with our comprehensive tools.</p>
+            <a href="/dashboard" class="btn btn-primary btn-large">View Your Progress</a>
+        </div>
+    {% else %}
+        <div class="container">
+            <h2>Ready to Boost Your SAT Score?</h2>
+            <p>Join thousands of students who have improved their scores with our platform.</p>
+            <div id="ctaButton">
+                <a href="/register" class="btn btn-primary btn-large">Start Your Free Practice Today</a>
+            </div>
+        </div>
+    {% endif %}
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 TestGenie</p>
+    </div>
+</footer>
+
+
+{% endblock %}

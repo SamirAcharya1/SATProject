@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+
+{% block title %}SAT Mock - Master the SAT with Mock Tests{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardCss.css') }}">
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/" class="logo">
+                <div class="logo-icon">📚</div>
+                SAT Scholars
+            </a>
+            <div class="nav-right">
+                <a href="/dashboard" class="dashboard-btn">Dashboard</a>
+                <div class="user-profile">
+                    <div class="user-icon">👤</div>
+                    <span id="username">{{ username }}</span>
+                </div>
+                <form action="/logout" method="get">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome back, <span id="welcomeUsername">{{ username }}</span>! 👋</h1>
+            <p class="welcome-subtitle">Ready to continue your SAT preparation? Let's boost that score!</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-title">Tests Taken</div>
+                <div class="stat-value" id="testsTaken">{{ testCount }}</div>
+                <div class="stat-description">Keep practicing to improve!</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-title">Average Score</div>
+                <div class="stat-value percentage" id="averageScore">{{ testAverageScore }}%</div>
+                <div class="stat-description" id="scoreDescription">Take your first quiz!</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2 class="section-title">Quick Actions</h2>
+            <div class="actions-grid">
+                <button class="action-btn action-btn-primary" onclick="window.location.href = '/startQuiz'">
+                    ▶️ Start New Quiz
+                </button>
+                <!-- <button class="action-btn action-btn-secondary" onclick="startTimedPractice()">
+                    ⏱️ Timed Practice
+                </button> -->
+            </div>
+        </div>
+        <style>
+            .quiz-name {
+                font-size: 1.3rem;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 6px;
+                color: #1a1a1a;
+            }
+
+            .quiz-score {
+                font-size: 1rem;
+                font-weight: 500;
+                padding: 4px 10px;
+                border-radius: 8px;
+                background-color: #e9f5ff;
+                color: #007bff;
+                min-width: 55px;
+                text-align: center;
+            }
+
+            .quiz-score.high {
+                background-color: #e6ffed;
+                color: #28a745;
+            }
+
+            .quiz-score.medium {
+                background-color: #fff5e6;
+                color: #ff9800;
+            }
+
+            .quiz-score.low {
+                background-color: #ffe6e6;
+                color: #dc3545;
+            }
+
+            .quiz-details {
+                font-size: 0.95rem;
+                color: #555;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+        </style>
+        <!-- Recent Quiz History -->
+        <div class="quiz-history">
+            <h2 class="section-title">Recent Quiz History</h2>
+            <div id="quizHistoryContainer">
+                {% if hasHistory %}
+                    {% for quiz in quizs %}
+                        <div class="quiz-info">
+                            <div class="quiz-name">
+                                {{ quiz.name }}
+                                <span class="quiz-score {% if quiz.score >= 80 %}high{% elif quiz.score >= 50 %}medium{% else %}low{% endif %}">
+                                    {{ quiz.score }}%
+                                </span>
+                            </div>
+                            <div class="quiz-details">
+                                <span>📅 {{quiz.formattedDate}}</span>
+                                <span>{{quiz.correctAnswers}}/{{quiz.totalQuestions}} correct</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-history">
+                        <div class="no-history-icon">📝</div>
+                        <p>No quiz history yet. Take your first quiz to see your progress!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

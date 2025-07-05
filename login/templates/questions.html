@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block title %}Questions Input Page{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/questions.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block body %}
+
+<form class="form-section" action="/qregister" method="POST" enctype="multipart/form-data">
+    <!-- Grid Row 1 -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <label for="subject">Subject</label>
+            <select class="form-select" name="subject" id="subject" required>
+                <option selected disabled>Select Subject</option>
+                <option value="Math">Math</option>
+                <option value="English">English</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="category">Category</label>
+            <select class="form-select" name="category" id="category" required>
+                <option selected disabled>Select Category</option>
+                <option value="Algebra">Algebra</option>
+                <option value="Problem Solving">Problem Solving</option>
+                <option value="Advanced Math">Advanced Math</option>
+                <option value="Geometry">Geometry</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="difficulty">Difficulty</label>
+            <select class="form-select" name="difficulty" id="difficulty" required>
+                <option selected disabled>Select Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="QType">Question Type</label>
+            <select class="form-select" name="QType" id="QType" required>
+                <option selected disabled>Question Type</option>
+                <option value="MCQ">MCQ</option>
+                <option value="SPR">SPR</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Question Text -->
+    <div class="mb-4">
+        <label for="QText">Question Text</label>
+        <input type="text" class="form-control" name="QText" id="QText" required
+            placeholder="Enter the question here...">
+    </div>
+
+    <!-- Answer Options in 2x2 Grid -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <label for="A">A.</label>
+            <input type="text" class="form-control" name="A" id="A">
+        </div>
+        <div class="col-md-6">
+            <label for="B">B.</label>
+            <input type="text" class="form-control" name="B" id="B">
+        </div>
+        <div class="col-md-6 mt-3">
+            <label for="C">C.</label>
+            <input type="text" class="form-control" name="C" id="C">
+        </div>
+        <div class="col-md-6 mt-3">
+            <label for="D">D.</label>
+            <input type="text" class="form-control" name="D" id="D">
+        </div>
+    </div>
+
+    <!-- Correct Answer -->
+    <div class="mb-4">
+        <label for="correctAns">Correct Answer</label>
+        <select class="form-select" name="correctAns" id="correctAns" required>
+            <option selected disabled>Correct One</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select>
+    </div>
+
+    <!-- Explanation -->
+    <div class="mb-4">
+        <label for="explanation">Explanation</label>
+        <input type="text" class="form-control" name="explanation" id="explanation" required
+            placeholder="Why is it the correct answer?">
+    </div>
+
+    <!-- Image Upload -->
+    <div class="mb-4">
+        <h5 class="mb-3">Upload Image</h5>
+        <div id="drop-area">
+            <p>Drag & Drop an image here<br>or<br>Paste image with <b>Ctrl + V</b></p>
+            <input type="file" name="image" id="fileElem" accept="image/*" style="display:none;">
+            <label for="fileElem" style="cursor:pointer; color:#007bff;">Click to select an image</label>
+        </div>
+        <img id="preview" class="mt-3" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Question</button>
+</form>
+
+
+{% endblock %}
+
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/questions.js') }}"></script>
+{% endblock %}

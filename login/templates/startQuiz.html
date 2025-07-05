@@ -1,0 +1,185 @@
+{% extends "layout.html" %}
+
+{% block title %}LogIn / SignUp{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/startQuiz.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/indexStyle.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/index" class="logo">
+                <div class="logo-icon">📚</div>
+                SAT Scholars
+            </a>
+            <div class="nav-center">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-buttons" id="navButtons">
+                {% if username %}
+                    <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                    <div class="user-profile">
+                        <div class="user-icon">👤</div>
+                        <span>{{ username }}</span>
+                    </div>
+                    <form action="/logout" method="get">
+                        <button type="submit" class="btn btn-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <form action="/register" method="post" style="display:inline;">
+                        <a href="/register" class="btn btn-secondary" onclick="event.preventDefault(); this.closest('form').submit();">Login</a>
+                    </form>
+                    <a href="/register" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="quiz-setup-container">
+            <!-- Header -->
+            <div class="setup-header">
+                <h1 class="setup-title">Customize Your <span style="color: #4f46e5;">Quiz</span></h1>
+                <p class="setup-subtitle">Choose your preferred settings to create a personalized SAT practice
+                    experience.</p>
+            </div>
+
+            <!-- Setup Form -->
+            <form action="/quiz" method="POST" onsubmit="return setFormValues()">
+                <div class="setup-form">
+
+                    <!-- Number of Questions -->
+                    <div class="form-section">
+                        <div class="section-label">📊 Number of Questions</div>
+                        <div class="section-description">
+                            Select how many questions you'd like to practice with.
+                        </div>
+                        <div class="custom-dropdown" id="questionsDropdown">
+                            <div class="dropdown-button" onclick="toggleDropdown('questionsDropdown')">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-title dropdown-placeholder">Select number of questions</div>
+                                </div>
+                                <div class="dropdown-arrow">▼</div>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-option" data-questions="5" onclick="selectQuestions(5)">
+                                    <div class="option-icon">⚡</div>
+                                    <div class="option-details">
+                                        <div class="option-title">5 Questions</div>
+                                        <div class="option-description">Quick practice session • 8-10 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-questions="10" onclick="selectQuestions(10)">
+                                    <div class="option-icon">🎯</div>
+                                    <div class="option-details">
+                                        <div class="option-title">10 Questions</div>
+                                        <div class="option-description">Focused practice • 15-20 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-questions="15" onclick="selectQuestions(15)">
+                                    <div class="option-icon">💪</div>
+                                    <div class="option-details">
+                                        <div class="option-title">15 Questions</div>
+                                        <div class="option-description">Extended practice • 25-30 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-questions="20" onclick="selectQuestions(20)">
+                                    <div class="option-icon">🏆</div>
+                                    <div class="option-details">
+                                        <div class="option-title">20 Questions</div>
+                                        <div class="option-description">Full section practice • 35-40 minutes</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subject Area -->
+                    <div class="form-section">
+                        <div class="section-label">📚 Subject Area</div>
+                        <div class="section-description">
+                            Choose the SAT subject area you want to focus on.
+                        </div>
+                        <div class="custom-dropdown" id="subjectDropdown">
+                            <div class="dropdown-button" onclick="toggleDropdown('subjectDropdown')">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-title dropdown-placeholder">Select subject area</div>
+                                </div>
+                                <div class="dropdown-arrow">▼</div>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-option" data-subject="Math" onclick="selectSubject('Math')">
+                                    <div class="option-icon">🔢</div>
+                                    <div class="option-details">
+                                        <div class="option-title">Mathematics</div>
+                                        <div class="option-description">Algebra, geometry, trigonometry, and data
+                                            analysis</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-subject="English" onclick="selectSubject('English')">
+                                    <div class="option-icon">📖</div>
+                                    <div class="option-details">
+                                        <div class="option-title">English</div>
+                                        <div class="option-description">Reading comprehension, grammar, and writing
+                                            skills</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-option" data-subject="Mixed" onclick="selectSubject('Mixed')">
+                                    <div class="option-icon">🎲</div>
+                                    <div class="option-details">
+                                        <div class="option-title">Mixed Practice</div>
+                                        <div class="option-description">Random questions from Math and English</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Inputs -->
+                    <input type="hidden" id="questionCountInput" name="questions" />
+                    <input type="hidden" id="subjectInput" name="subject" />
+
+                    <!-- Quiz Summary -->
+                    <div class="quiz-summary" id="quizSummary">
+                        <div class="summary-title">📋 Quiz Summary</div>
+                        <div class="summary-details" id="summaryContent">
+                            <!-- JavaScript populates this -->
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="/dashboard" class="btn-back">← Back to Dashboard</a>
+                        <button type="submit" class="btn-start" id="startQuizBtn" disabled>Start Quiz 🚀</button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 TestGenie</p>
+    </div>
+</footer>
+{% endblock %}
+
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/startQuiz.js') }}"></script>
+{% endblock %}

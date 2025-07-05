@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ subject }} Quiz</title>
+
+    <script defer>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$$', '$$'], ['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary: #007bff;
+            --primary-dark: #0056b3;
+            --bg: #f4f9ff;
+            --white: #fff;
+            --shadow: rgba(0, 0, 0, 0.1) 0 3px 10px;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            color: #222;
+        }
+
+        form {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 750px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .progress {
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .question-block {
+            display: none;
+        }
+
+        .question-block.active {
+            display: block;
+        }
+
+        .question-block p {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: var(--border-radius);
+            resize: vertical;
+            font-size: 1rem;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-buttons button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .nav-buttons .back-btn {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .nav-buttons .back-btn:hover {
+            background: #ccc;
+        }
+
+        .nav-buttons .next-btn,
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-buttons .next-btn:hover,
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 14px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--border-radius);
+            background: linear-gradient(to right, #0066ff, #00c3ff);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.35);
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/submit-quiz" method="POST" id="quizForm">
+        <h1>{{ subject }} Quiz</h1>
+        <div class="progress" id="progressText">Question 1 of {{ questions|length }}</div>
+
+        {% for q in questions %}
+        <div class="question-block {% if loop.first %}active{% endif %}" data-index="{{ loop.index }}">
+            <p>Q{{ loop.index }}. <span class="mathjax">{{ q.questionText | safe }}</span></p>
+
+            {% if q.questionType == 'MCQ' %}
+            {% for opt in q.options %}
+            <label class="option-label">
+                <input type="radio" name="answer_{{ q.id }}" value="{{ opt.optionLabel }}" required />
+                {{ opt.optionLabel }}. {{ opt.optionText }}
+            </label>
+            {% endfor %}
+
+            {% elif q.questionType == 'SPR' %}
+            <textarea name="answer_{{ q.id }}" required></textarea>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="nav-buttons">
+            <button type="button" class="back-btn" onclick="prevQuestion()">Back</button>
+            <button type="button" class="next-btn" onclick="nextQuestion()">Next</button>
+        </div>
+
+        <button type="submit" class="submit-btn" style="display:none;">🚀 Submit Answers</button>
+    </form>
+
+    <script>
+        const questions = document.querySelectorAll('.question-block');
+        const progressText = document.getElementById('progressText');
+        const submitBtn = document.querySelector('.submit-btn');
+        let current = 0;
+
+        function updateUI() {
+            questions.forEach((q, i) => {
+                q.classList.toggle('active', i === current);
+            });
+
+            document.querySelector('.back-btn').style.display = current === 0 ? 'none' : 'inline-block';
+            document.querySelector('.next-btn').style.display = current === questions.length - 1 ? 'none' : 'inline-block';
+            submitBtn.style.display = current === questions.length - 1 ? 'block' : 'none';
+            progressText.textContent = `Question ${current + 1} of ${questions.length}`;
+        }
+
+        function validateCurrentQuestion() {
+            const active = questions[current];
+            const inputs = active.querySelectorAll('input[type="radio"], textarea');
+
+            for (const input of inputs) {
+                if ((input.type === 'radio' && input.checked) || (input.tagName === 'TEXTAREA' && input.value.trim() !== '')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function nextQuestion() {
+            if (!validateCurrentQuestion()) {
+                alert('Please answer the question before continuing.');
+                return;
+            }
+
+            if (current < questions.length - 1) {
+                current++;
+                updateUI();
+            }
+        }
+
+        function prevQuestion() {
+            if (current > 0) {
+                current--;
+                updateUI();
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+
+</html>

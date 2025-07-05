@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/indexStyle.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<style>
+    body {
+        overflow-x: hidden;
+    }
+</style>
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/index" class="logo">
+                <div class="logo-icon">📚</div>
+                SAT Scholars
+            </a>
+            <div class="nav-center">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-buttons" id="navButtons">
+                {% if username %}
+                    <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                    <div class="user-profile">
+                        <div class="user-icon">👤</div>
+                        <span>{{ username }}</span>
+                    </div>
+                    <form action="/logout" method="get">
+                        <button type="submit" class="btn btn-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <form action="/register" method="post" style="display:inline;">
+                        <a href="/register" class="btn btn-secondary" onclick="event.preventDefault(); this.closest('form').submit();">Login</a>
+                    </form>
+                    <a href="/register" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Contact <span class="highlight">Us</span></h1>
+            <p>Have questions or need support? We're here to help you succeed on your SAT journey.</p>
+        </div>
+    </section>
+
+            <!-- Team Section -->
+            <div class="team-section">
+                <h2 class="section-title">Meet Our Team</h2>
+                <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 2rem; translate: 30%;">Our dedicated team of educators and technologists is committed to helping you achieve your SAT goals.</p>
+                
+                <div class="team-grid">
+                    <!-- Team Member 1 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👨‍💼</div>
+                        <h3 class="member-name">Samir Acharya</h3>
+                        <p class="member-role">Backend Developer</p>
+                        <div class="member-contact">
+                            <a href="mailto:alex@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">💼</a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 2 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👩‍🏫</div>
+                        <h3 class="member-name">Samrat Acharya</h3>
+                        <p class="member-role">AI Integration</p>
+                        <div class="member-contact">
+                            <a href="mailto:sarah@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">🎓</a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="team-member">
+                        <div class="member-avatar">👨‍💻</div>
+                        <h3 class="member-name">Bibek Gautam</h3>
+                        <p class="member-role">Frontend Developer</p>
+                        <div class="member-contact">
+                            <a href="mailto:marcus@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">💻</a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 4 -->
+                    <div class="team-member">
+                        <div class="member-avatar">🕵️‍♂️</div>
+                        <h3 class="member-name">Sayujya Bastola</h3>
+                        <p class="member-role">Full Stack</p>
+                        <div class="member-contact">
+                            <a href="mailto:emily@satmock.com" class="contact-link">📧</a>
+                            <a href="#" class="contact-link">🔬</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 TestGenie</p>
+        </div>
+    </footer>
+</body>
+</html>
+
+{% endblock %}

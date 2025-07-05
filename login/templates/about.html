@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+
+{% block title %}About Us{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/indexStyle.css') }}">
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/index" class="logo">
+                <div class="logo-icon">📚</div>
+                SAT Scholars
+            </a>
+            <div class="nav-center">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-buttons" id="navButtons">
+                {% if username %}
+                    <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                    <div class="user-profile">
+                        <div class="user-icon">👤</div>
+                        <span>{{ username }}</span>
+                    </div>
+                    <form action="/logout" method="get">
+                        <button type="submit" class="btn btn-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <form action="/register" method="post" style="display:inline;">
+                        <a href="/register" class="btn btn-secondary" onclick="event.preventDefault(); this.closest('form').submit();">Login</a>
+                    </form>
+                    <a href="/register" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>About <span class="highlight">SAT Scholars</span></h1>
+            <p>Empowering students to achieve their SAT goals through innovative practice and personalized learning.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Mission Section -->
+            <div class="content-section">
+                <h2 class="section-title">Our Mission</h2>
+                <div class="section-content">
+                    <p>At SAT Mock, we believe every student deserves access to high-quality test preparation resources. Our mission is to democratize SAT preparation by providing realistic practice tests, instant feedback, and AI-powered explanations that help students understand not just what the right answer is, but why it's right.</p>
+                    
+                    <p>We're committed to helping students build confidence, improve their scores, and achieve their college dreams through innovative technology and proven educational methods.</p>
+                </div>
+            </div>
+
+            <!-- What We Offer Section -->
+            <div class="content-section">
+                <h2 class="section-title">What We Offer</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Realistic Practice Tests</h3>
+                        <p>Full-length SAT practice tests that mirror the actual exam format, timing, and difficulty level.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI-Powered Explanations</h3>
+                        <p>Detailed explanations for every question, powered by artificial intelligence to help you understand concepts.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Progress Tracking</h3>
+                        <p>Comprehensive analytics to track your improvement and identify areas that need more focus.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Instant Feedback</h3>
+                        <p>Get immediate results and explanations right after completing each practice session.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Us Section -->
+            <div class="content-section">
+                <h2 class="section-title">Why Choose SAT Mock?</h2>
+                <div class="section-content">
+                    <p><strong>🎯 Targeted Practice:</strong> Our questions are carefully crafted to match the SAT's format and difficulty, ensuring you're practicing with the most relevant content.</p>
+                    
+                    <p><strong>🧠 Smart Learning:</strong> Our AI technology adapts to your learning style and provides personalized explanations that make complex concepts easier to understand.</p>
+                    
+                    <p><strong>📱 Accessible Anywhere:</strong> Practice on any device, anywhere, anytime. Our platform is fully responsive and works seamlessly across all devices.</p>
+                    
+                    <p><strong>💰 Affordable Excellence:</strong> We believe quality test prep shouldn't break the bank. Our platform offers premium features at a fraction of the cost of traditional prep courses.</p>
+                    
+                    <p><strong>🏆 Proven Results:</strong> Our students consistently see significant score improvements, with an average increase of 150+ points.</p>
+                </div>
+            </div>
+
+            <!-- Get Started Section -->
+            <div class="content-section" style="text-align: center; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe;">
+                <h2 class="section-title" style="color: #1e40af;">Ready to Start Your SAT Journey?</h2>
+                <div class="section-content" style="color: #1e40af;">
+                    <p>Join thousands of students who have improved their SAT scores with our platform. Start practicing today and see the difference!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 TestGenie</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+{% endblock %}
