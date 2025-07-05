@@ -444,8 +444,9 @@ def submit_quiz():
 
 @app.route("/clearUsers")
 def clearUsers():
+    userId = session.get("userId")
     try:
-        db.execute("DELETE FROM users")
+        db.execute("DELETE FROM users WHERE id = ?", userId)
         session.clear()
     except Exception as e:
         return "Exception"
